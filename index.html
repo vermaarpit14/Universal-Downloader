@@ -1,231 +1,505 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Universal Downloader</title>
-    <meta name="description" content="Quickly download high-quality videos and audio from YouTube, Instagram, Facebook, and Twitter. Free, fast, and built for everyone.">
+    <title>Universal Media Downloader | Fast & Free</title>
+    <meta name="description" content="Download high-quality videos and audio from YouTube, Instagram, Facebook, and Twitter instantly. Fast, secure and free.">
 
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://universal-downloader-1jbu.onrender.com/">
     <meta property="og:title" content="Universal Media Downloader">
-    <meta property="og:description" content="Quickly download high-quality videos and audio from YouTube, Instagram, Facebook, and Twitter. Free, fast, and built for everyone.">
+    <meta property="og:description" content="Download videos & audio instantly from YouTube, Instagram, Facebook & more.">
     <meta property="og:image" content="https://images.icon-icons.com/1508/PNG/512/allvideodownloader_104443.png">
-
-    <meta property="twitter:card" content="summary">
-    <meta property="twitter:url" content="https://universal-downloader-1jbu.onrender.com/">
-    <meta property="twitter:title" content="Universal Media Downloader">
-    <meta property="twitter:description" content="Quickly download high-quality videos and audio from YouTube, Instagram, Facebook, and Twitter. Free, fast, and built for everyone.">
-    <meta property="twitter:image" content="https://images.icon-icons.com/1508/PNG/512/allvideodownloader_104443.png">
-
-    <link rel="icon" type="image/png" href="https://images.icon-icons.com/1508/PNG/512/allvideodownloader_104443.png" />
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="icon" href="https://images.icon-icons.com/1508/PNG/512/allvideodownloader_104443.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <style>
-        /* Smooth transitions for theme switching */
-        body { 
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+        :root {
+            --bg-color: #f8fafc;
+            --bg-alt: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary-accent: #2563eb;
+            --primary-hover: #1d4ed8;
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-color: #020617;
+            --bg-alt: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --primary-accent: #3b82f6;
+            --primary-hover: #2563eb;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        
-        /* Glassmorphism/Elevated effect for the main card */
-        .main-card { 
-            border-radius: 16px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2); 
-            width: 100%; 
-            max-width: 550px; 
-            padding: 40px; 
+
+        /* Navbar */
+        .navbar {
+            background-color: rgba(var(--card-bg-rgb), 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            background: var(--card-bg);
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hero / About Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(180deg, var(--bg-color) 0%, var(--bg-alt) 100%);
+            padding-top: 80px; /* Offset for navbar */
+        }
+
+        .hero-title {
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            background: linear-gradient(135deg, var(--primary-accent), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .hero-img-container img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--primary-accent);
+            animation: bounce 2s infinite;
+            text-decoration: none;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+
+        /* Tool Section */
+        .tool-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 20px;
+            background-color: var(--bg-color);
+        }
+
+        .main-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
             transition: background-color 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            z-index: 10;
         }
-        
-        /* Dark theme specific card styling */
+
         [data-bs-theme="dark"] .main-card {
-            background: #1e1e24;
-            border: 1px solid #333;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
         }
 
-        /* Light theme specific card styling */
-        [data-bs-theme="light"] .main-card {
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
+        /* Form Elements */
+        .form-control, .form-select {
+            border-radius: 12px;
+            padding: 16px;
+            background-color: var(--bg-alt);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            box-shadow: none !important;
         }
 
-        .thumbnail-container { display: none; margin-top: 20px; text-align: center; }
-        .thumbnail-container img { width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s ease; }
-        .thumbnail-container img:hover { transform: scale(1.02); }
-        .video-title { margin-top: 15px; font-size: 1.1rem; font-weight: 600; }
-        
-        .footer-heart { color: #e25555; animation: heartbeat 1.5s infinite; display: inline-block; }
-        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-accent);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .input-group-text {
+            background-color: var(--bg-alt);
+            border: 1px solid var(--border-color);
+            border-right: none;
+            color: var(--text-muted);
+        }
+
+        .form-control { border-left: none; padding-left: 0; }
+
+        .download-btn {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 16px;
+            background-color: var(--primary-accent);
+            border: none;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .download-btn:hover { background-color: var(--primary-hover); }
+        .download-btn:active { transform: scale(0.98); }
+
+        /* Preview Box */
+        #previewBox {
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            margin-bottom: 0; 
+        }
+        .thumbnail-wrapper {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .thumbnail-wrapper img { width: 100%; display: block; }
+
+        /* Features */
+        .feature-box {
+            padding: 24px;
+            border-radius: 16px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            height: 100%;
+        }
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Initial hidden states for GSAP */
+        .hero-text, .hero-img-container, .tool-reveal, .feature-reveal {
+            opacity: 0;
+            visibility: hidden;
+        }
     </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
 
-    <nav class="navbar navbar-expand-lg shadow-sm border-bottom py-3">
+<body>
+
+    <nav class="navbar py-3 fixed-top shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-                <img src="https://images.icon-icons.com/1508/PNG/512/allvideodownloader_104443.png" alt="Logo" width="30" height="30">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#" style="color: var(--text-main);">
+                <img src="https://images.icon-icons.com/1508/PNG/512/allvideodownloader_104443.png" width="28">
                 Universal Downloader
             </a>
-            <button class="btn btn-outline-secondary rounded-circle p-2 d-flex align-items-center justify-content-center" id="themeToggle" onclick="toggleTheme()" style="width: 40px; height: 40px;">
-                <i class="bi bi-sun-fill" id="themeIcon"></i>
+            <button class="btn btn-sm" onclick="toggleTheme()" style="color: var(--text-main); border: 1px solid var(--border-color);">
+                <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
             </button>
         </div>
     </nav>
 
-    <main class="flex-grow-1 d-flex justify-content-center align-items-center py-5 px-3">
-        <div class="main-card">
-            <h3 class="text-center mb-4 fw-bold">Download Media</h3>
-            
-            <div class="mb-4">
-                <div class="input-group input-group-lg">
-                    <span class="input-group-text bg-primary text-white border-primary"><i class="bi bi-link-45deg"></i></span>
-                    <input type="url" id="link" class="form-control" placeholder="Paste YouTube, Insta, or FB link..." oninput="fetchVideoInfo()">
+    <section class="hero-section position-relative" id="about">
+        <div class="container">
+            <div class="row align-items-center min-vh-100 pb-5">
+                <div class="col-lg-6 hero-text text-center text-lg-start mb-5 mb-lg-0">
+                    <span class="badge bg-primary bg-opacity-10 text-primary mb-3 px-3 py-2 rounded-pill fw-semibold border border-primary border-opacity-25">v1.0 is Live</span>
+                    <h1 class="hero-title mb-4">The Ultimate Media Extraction Tool</h1>
+                    <p class="fs-5 text-muted mb-4 pe-lg-4" style="line-height: 1.6;">
+                        Stop fighting with spammy websites and broken links. Our universal engine seamlessly bypasses restrictions to deliver high-fidelity video and audio straight to your hard drive. Completely free, endlessly reliable.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start mb-5">
+                        <span class="text-muted fw-medium d-flex align-items-center gap-2"><i class="bi bi-youtube text-danger fs-4"></i> YouTube</span>
+                        <span class="text-muted fw-medium d-flex align-items-center gap-2"><i class="bi bi-instagram text-warning fs-4"></i> Instagram</span>
+                        <span class="text-muted fw-medium d-flex align-items-center gap-2"><i class="bi bi-facebook text-primary fs-4"></i> Facebook</span>
+                        <span class="text-muted fw-medium d-flex align-items-center gap-2"><i class="bi bi-twitter-x fs-4"></i> X/Twitter</span>
+                    </div>
+                    <a href="#tool" class="btn btn-primary btn-lg px-5 py-3 fw-bold rounded-pill shadow-sm transition">
+                        Start Downloading <i class="bi bi-arrow-down ms-2"></i>
+                    </a>
+                </div>
+                <div class="col-lg-6 hero-img-container text-center">
+                    <img src="https://images.icon-icons.com/1508/PNG/512/allvideodownloader_104443.png" alt="App Logo" style="max-width: 400px; width: 100%;">
                 </div>
             </div>
+        </div>
+        <a href="#tool" class="scroll-indicator"><i class="bi bi-chevron-down"></i></a>
+    </section>
 
-            <div class="thumbnail-container mb-4" id="previewBox">
-                <img id="thumbnailImg" src="" alt="Video Thumbnail">
-                <div class="video-title" id="videoTitle"></div>
-            </div>
+    <section class="tool-section" id="tool">
+        <div class="container d-flex flex-column align-items-center">
             
-            <div class="mb-4">
-                <label for="format" class="form-label fw-semibold text-secondary small text-uppercase tracking-wide">Select Quality & Format</label>
-                <select id="format" class="form-select form-select-lg cursor-pointer">
-                    <optgroup label="Audio Only">
-                        <option value="mp3">🎧 MP3 Audio (No Video)</option>
+            <div class="text-center mb-5 tool-reveal">
+                <h2 class="fw-bold fs-1 mb-2">Ready to Extract?</h2>
+                <p class="text-muted">Paste your URL below. We'll handle the rest.</p>
+            </div>
+
+            <div class="main-card tool-reveal mb-5">
+                <div class="input-group mb-4">
+                    <span class="input-group-text"><i class="bi bi-link-45deg fs-5"></i></span>
+                    <input type="url" id="link" class="form-control" placeholder="https://..." oninput="fetchVideoInfo()">
+                </div>
+
+                <div id="previewBox">
+                    <div class="thumbnail-wrapper mb-3">
+                        <img id="thumbnailImg" src="" alt="Video Preview">
+                    </div>
+                    <h5 id="videoTitle" class="fw-bold mb-4 text-center" style="color: var(--text-main);"></h5>
+                </div>
+
+                <label class="small fw-semibold text-muted mb-2 text-uppercase" style="letter-spacing: 0.5px;">Select Output Format</label>
+                <select id="format" class="form-select mb-4">
+                    <optgroup label="Audio">
+                        <option value="mp3">🎵 MP3 Audio (High Quality)</option>
                     </optgroup>
                     <optgroup label="Video + Audio">
-                        <option value="1080p-audio" selected>🎬 1080p (Video + Audio)</option>
-                        <option value="720p-audio">📱 720p (Video + Audio)</option>
-                        <option value="360p-audio">💾 360p (Video + Audio)</option>
+                        <option value="1080p-audio" selected>🎬 1080p Video (HD)</option>
+                        <option value="720p-audio">📱 720p Video (Standard)</option>
+                        <option value="360p-audio">💾 360p Video (Data Saver)</option>
                     </optgroup>
-                    <optgroup label="Video Only (No Audio)">
-                        <option value="1080p-noaudio">🔇 1080p (No Audio)</option>
-                        <option value="720p-noaudio">🔇 720p (No Audio)</option>
-                        <option value="360p-noaudio">🔇 360p (No Audio)</option>
+                    <optgroup label="Video Only">
+                        <option value="1080p-noaudio">🔇 1080p (Muted)</option>
                     </optgroup>
                 </select>
+
+                <button id="downloadBtn" class="btn btn-primary w-100 download-btn text-white d-flex justify-content-center align-items-center gap-2" onclick="handleDownload()">
+                    <i class="bi bi-cloud-arrow-down-fill fs-5" id="btnIcon"></i>
+                    <span id="btnText">Download Media</span>
+                    <div class="spinner-border spinner-border-sm" id="loadingSpinner" style="display:none"></div>
+                </button>
+
+                <div id="status" class="text-center mt-3 fw-medium text-muted" style="font-size: 0.9rem;"></div>
             </div>
 
-            <button id="downloadBtn" class="btn btn-primary w-100 py-3 fw-bold fs-5 d-flex justify-content-center align-items-center gap-2 rounded-3 shadow-sm transition" onclick="handleDownload()">
-                <i class="bi bi-cloud-arrow-down-fill" id="btnIcon"></i>
-                <span id="btnText">Download Now</span>
-                <div class="spinner-border spinner-border-sm text-light" id="loadingSpinner" role="status" style="display: none;"></div>
-            </button>
+            <div class="row g-4 w-100" style="max-width: 900px;">
+                <div class="col-md-4 feature-reveal">
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+                        <div>
+                            <div class="fw-bold mb-1">Server-Side Muxing</div>
+                            <div class="small text-muted fw-normal">FFmpeg processes streams instantly in the cloud.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 feature-reveal">
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
+                        <div>
+                            <div class="fw-bold mb-1">Privacy First</div>
+                            <div class="small text-muted fw-normal">Zero logging. Files are deleted immediately after download.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 feature-reveal">
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="bi bi-phone-fill"></i></div>
+                        <div>
+                            <div class="fw-bold mb-1">Universal Playback</div>
+                            <div class="small text-muted fw-normal">M4A audio encoding guarantees cross-device compatibility.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            <div id="status" class="mt-3 text-center fw-bold"></div>
         </div>
-    </main>
+    </section>
 
-    <footer class="py-4 mt-auto border-top text-center text-secondary">
-        <div class="container">
-            <small class="fw-medium">Made with <i class="bi bi-heart-fill footer-heart"></i> by Arpit</small>
-        </div>
+    <footer class="text-center py-4 border-top" style="background-color: var(--bg-color);">
+        <div class="fw-medium mb-1">© 2026 Universal Media Downloader</div>
+        <small class="text-muted">Built for educational use. Please respect platform copyrights.</small>
     </footer>
 
     <script>
-        // --- Theme Toggle Logic ---
+        // --- GSAP & SCROLLTRIGGER LOGIC ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Unhide elements for GSAP
+            gsap.set(".hero-text, .hero-img-container, .tool-reveal, .feature-reveal", { autoAlpha: 1 });
+
+            // 1. Hero Section Load Animation
+            const heroTl = gsap.timeline();
+            heroTl.from(".hero-text", { x: -50, opacity: 0, duration: 1, ease: "power3.out" })
+                  .from(".hero-img-container", { x: 50, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.7");
+
+            // 2. Downloader Tool Scroll Animation
+            gsap.from(".tool-reveal", {
+                scrollTrigger: {
+                    trigger: "#tool",
+                    start: "top 75%", // Triggers when the top of the #tool section hits 75% down the viewport
+                },
+                y: 60,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "back.out(1.2)"
+            });
+
+            // 3. Features Stagger Scroll Animation
+            gsap.from(".feature-reveal", {
+                scrollTrigger: {
+                    trigger: ".feature-reveal",
+                    start: "top 85%",
+                },
+                y: 40,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.15,
+                ease: "power2.out"
+            });
+        });
+
+        // --- Theme Toggle ---
         function toggleTheme() {
             const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-bs-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-bs-theme', newTheme);
+            const current = html.getAttribute("data-bs-theme");
+            const next = current === "dark" ? "light" : "dark";
+            html.setAttribute("data-bs-theme", next);
             
-            const themeIcon = document.getElementById('themeIcon');
-            themeIcon.className = newTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+            const themeIcon = document.getElementById("themeIcon");
+            themeIcon.className = next === "dark" ? "bi bi-moon-stars-fill" : "bi bi-sun-fill";
+            gsap.from(themeIcon, { scale: 0.5, rotation: 180, duration: 0.4, ease: "back.out(1.7)" });
         }
 
-        // --- Video Info Fetching ---
-        let infoTimeout;
+        // --- Fetch Info (with GSAP drop-down) ---
+        let timeout;
+        let isPreviewVisible = false;
+
         function fetchVideoInfo() {
-            clearTimeout(infoTimeout);
-            const url = document.getElementById('link').value;
-            const previewBox = document.getElementById('previewBox');
+            clearTimeout(timeout);
+            const url = document.getElementById("link").value;
             
-            if (!url || url.length < 10) {
-                previewBox.style.display = 'none';
+            if (!url) {
+                if(isPreviewVisible) {
+                    gsap.to("#previewBox", { height: 0, opacity: 0, duration: 0.4, ease: "power2.inOut" });
+                    isPreviewVisible = false;
+                }
                 return;
             }
 
-            infoTimeout = setTimeout(async () => {
-                document.getElementById('videoTitle').innerText = "Fetching preview...";
-                previewBox.style.display = 'block';
-
+            timeout = setTimeout(async () => {
                 try {
-                    const response = await fetch('/info', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                    document.getElementById("status").innerText = "Locating media details...";
+                    
+                    const res = await fetch("/info", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ url })
                     });
+                    
+                    if (!res.ok) throw new Error();
+                    const data = await res.json();
+                    
+                    document.getElementById("thumbnailImg").src = data.thumbnail;
+                    document.getElementById("videoTitle").innerText = data.title;
+                    document.getElementById("status").innerText = "";
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        document.getElementById('thumbnailImg').src = data.thumbnail;
-                        document.getElementById('videoTitle').innerText = data.title;
-                    } else {
-                        document.getElementById('videoTitle').innerText = "Preview unavailable";
+                    if (!isPreviewVisible) {
+                        gsap.set("#previewBox", { height: "auto" });
+                        const targetHeight = document.getElementById("previewBox").offsetHeight;
+                        gsap.fromTo("#previewBox", 
+                            { height: 0, opacity: 0 }, 
+                            { height: targetHeight, opacity: 1, duration: 0.6, ease: "power3.out" }
+                        );
+                        isPreviewVisible = true;
                     }
-                } catch (err) {
-                    document.getElementById('videoTitle').innerText = "Preview unavailable";
+                } catch {
+                    document.getElementById("status").innerText = "Preview unavailable. You can still proceed with the download.";
                 }
-            }, 600); // 600ms debounce
+            }, 600);
         }
 
         // --- Download Logic ---
         async function handleDownload() {
-            const url = document.getElementById('link').value;
-            const format = document.getElementById('format').value;
-            const statusText = document.getElementById('status');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const btnText = document.getElementById('btnText');
-            const btnIcon = document.getElementById('btnIcon');
-            const spinner = document.getElementById('loadingSpinner');
+            const url = document.getElementById("link").value;
+            const format = document.getElementById("format").value;
+            const btn = document.getElementById("downloadBtn");
+            const spinner = document.getElementById("loadingSpinner");
+            const icon = document.getElementById("btnIcon");
+            const text = document.getElementById("btnText");
+            const status = document.getElementById("status");
 
-            if (!url) return alert('Please enter a valid link!');
+            if (!url) {
+                gsap.fromTo(btn, { x: -10 }, { x: 10, duration: 0.1, yoyo: true, repeat: 3, ease: "none" });
+                return alert("Please paste a link to begin.");
+            }
 
-            // UI Loading State
-            statusText.innerText = "Processing media... grab a coffee! ☕";
-            statusText.className = "mt-3 text-center fw-bold text-info";
-            downloadBtn.disabled = true;
-            btnText.innerText = "Processing...";
-            btnIcon.style.display = "none";
+            btn.disabled = true;
+            icon.style.display = "none";
             spinner.style.display = "block";
+            text.innerText = "Extracting Data...";
+            status.innerText = "Server is muxing streams. This may take a minute...";
+            status.className = "text-center mt-3 fw-medium text-primary";
 
             try {
-                const response = await fetch('/download', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                const res = await fetch("/download", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ url, format })
                 });
 
-                if (!response.ok) throw new Error("Server failed to process the link.");
+                if(!res.ok) throw new Error();
 
-                const blob = await response.blob();
-                const downloadUrl = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = downloadUrl;
-                a.download = format === 'mp3' ? 'audio.mp3' : 'video.mp4';
-                document.body.appendChild(a);
+                const blob = await res.blob();
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = format === "mp3" ? "audio.mp3" : "video.mp4";
                 a.click();
-                a.remove();
                 
-                // UI Success State
-                statusText.innerText = "Download complete! 🎉";
-                statusText.className = "mt-3 text-center fw-bold text-success";
-            } catch (error) {
-                // UI Error State
-                statusText.innerText = "Error: " + error.message;
-                statusText.className = "mt-3 text-center fw-bold text-danger";
+                status.innerText = "Download completed successfully! 🎉";
+                status.className = "text-center mt-3 fw-medium text-success";
+            } catch {
+                status.innerText = "Download failed. The video might be private or region-locked.";
+                status.className = "text-center mt-3 fw-medium text-danger";
             } finally {
-                // Reset Button
-                downloadBtn.disabled = false;
-                btnText.innerText = "Download Now";
-                btnIcon.style.display = "block";
+                btn.disabled = false;
                 spinner.style.display = "none";
+                icon.style.display = "block";
+                text.innerText = "Download Media";
             }
         }
     </script>
