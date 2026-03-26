@@ -188,12 +188,23 @@
             overflow: hidden;
             margin-bottom: 0; 
         }
+        
         .thumbnail-wrapper {
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid var(--border-color);
+            background-color: var(--bg-alt);
+            display: flex;
+            justify-content: center;
         }
-        .thumbnail-wrapper img { width: 100%; display: block; }
+        
+        .thumbnail-wrapper img { 
+            width: 100%; 
+            height: auto; 
+            max-height: 320px;
+            object-fit: contain;
+            display: block; 
+        }
 
         /* Features */
         .feature-box {
@@ -370,7 +381,7 @@
             gsap.from(".tool-reveal", {
                 scrollTrigger: {
                     trigger: "#tool",
-                    start: "top 75%", // Triggers when the top of the #tool section hits 75% down the viewport
+                    start: "top 75%", 
                 },
                 y: 60,
                 opacity: 0,
@@ -434,19 +445,32 @@
                     if (!res.ok) throw new Error();
                     const data = await res.json();
                     
-                    document.getElementById("thumbnailImg").src = data.thumbnail;
-                    document.getElementById("videoTitle").innerText = data.title;
-                    document.getElementById("status").innerText = "";
+                    const thumbImg = document.getElementById("thumbnailImg");
+                    
+                    // Wait for the image to physically load before animating
+                    thumbImg.onload = () => {
+                        document.getElementById("videoTitle").innerText = data.title;
+                        document.getElementById("status").innerText = "";
 
-                    if (!isPreviewVisible) {
-                        gsap.set("#previewBox", { height: "auto" });
-                        const targetHeight = document.getElementById("previewBox").offsetHeight;
-                        gsap.fromTo("#previewBox", 
-                            { height: 0, opacity: 0 }, 
-                            { height: targetHeight, opacity: 1, duration: 0.6, ease: "power3.out" }
-                        );
-                        isPreviewVisible = true;
-                    }
+                        if (!isPreviewVisible) {
+                            gsap.set("#previewBox", { height: "auto" });
+                            const targetHeight = document.getElementById("previewBox").offsetHeight;
+                            gsap.fromTo("#previewBox", 
+                                { height: 0, opacity: 0 }, 
+                                { height: targetHeight, opacity: 1, duration: 0.6, ease: "power3.out" }
+                            );
+                            isPreviewVisible = true;
+                        } else {
+                            // Smoothly adjust height if switching between a Short and a standard video
+                            gsap.set("#previewBox", { height: "auto" });
+                            const newHeight = document.getElementById("previewBox").offsetHeight;
+                            gsap.to("#previewBox", { height: newHeight, duration: 0.4 });
+                        }
+                    };
+
+                    // Trigger the load
+                    thumbImg.src = data.thumbnail;
+
                 } catch {
                     document.getElementById("status").innerText = "Preview unavailable. You can still proceed with the download.";
                 }
